@@ -1,99 +1,106 @@
-import pandas as pd
 import os
-import nltk
-from nltk import WordNetLemmatizer
-from nltk.corpus import stopwords
-import openpyxl
+import re
+import pandas as pd
+import spacy
+from tqdm import tqdm
 
-nltk.download('wordnet')
-nltk.download('stopwords')
-
-# Initialize stopwords and lemmatizer
-stop_words = set(stopwords.words('english'))
-lemmatizer = WordNetLemmatizer()
+# Load spaCy's English NER model
+nlp = spacy.load("en_core_web_sm")
 
 def load_data(file_path):
-    """Load data from a CSV file."""
-    if os.path.exists(file_path):
+    """Load data from a CSV or Excel file."""
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"The file '{file_path}' does not exist.")
+    if file_path.endswith('.csv'):
         return pd.read_csv(file_path)
+    elif file_path.endswith(('.xlsx', '.xls')):
+        return pd.read_excel(file_path)
     else:
-        raise FileNotFoundError(f"The file {file_path} does not exist.")
+        raise ValueError("Unsupported file format. Only CSV and Excel files are supported.")
+
+def anonymize_pii(text):
+    """Anonymize PII in the text such as names, emails, and phone numbers."""
+    # Anonymize email addresses
+    text = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '<EMAIL>', text)
+    # Anonymize phone numbers
+    text = re.sub(r'\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b', '<PHONE>', text)
+
+    # Use spaCy NER to detect and replace names
+    doc = nlp(text)
+    for ent in doc.ents:
+        if ent.label_ == "PERSON":
+            text = text.replace(ent.text, "<NAME>")
+    return text
+
+def clean_resume_text(text):
+    """Clean and preprocess resume text."""
+    text = anonymize_pii(text)  # Anonymize PII first
+    text = text.lower()  # Convert to lowercase
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)  # Remove unwanted punctuation after anonymization
+    # Remove unwanted spaces
+    text = re.sub(r'\s+', ' ', text)
+    # Remove leading and trailing spaces
+    text = text.strip()
+    return text
 
 def preprocess_data(df):
-    """Preprocess the data."""
-    print("Initial shape of the data:", df.shape)
-    print(df[:5])
-    print("len of df:", len(df))
+    """Preprocess the data to create 'Resume_str' and 'relevance' columns."""
+    # Drop unnecessary columns if they exist
+    df.drop(columns=[col for col in ['Resume_html', 'ID'] if col in df.columns], inplace=True, errors='ignore')
 
-    # print all the columns
-    print("Columns in the data:")
-    print(df.columns)
+    # Handle 'Category' and create 'relevance' column
+    if 'Category' in df.columns:
+        df['relevance'] = df['Category'].apply(lambda x: 1 if x == 'INFORMATION-TECHNOLOGY' else 0)
+        df.drop(columns='Category', inplace=True)
+    elif 'relevance' not in df.columns:
+        raise ValueError("Data must contain 'Category' or 'relevance' column.")
 
-    # drop the html column
-    df.drop(columns=['Resume_html'], inplace=True)
+    # Identify resume text column
+    text_columns = ['Resume_str', 'resume_text']
+    resume_col = next((col for col in text_columns if col in df.columns), None)
+    if not resume_col:
+        raise ValueError("Data must contain 'Resume_str' or 'resume_text' column.")
 
-    # print all categories
-    print("Categories in the data:")
-    print(df['Category'].unique())
+    # Rename resume text column to 'Resume_str' if necessary
+    if resume_col != 'Resume_str':
+        df.rename(columns={resume_col: 'Resume_str'}, inplace=True)
 
-    # Create a new column 'relevance' based on the 'Category' column
-    # 0 means not relevant, 1 means relevant (here we consider 'INFORMATION-TECHNOLOGY' as relevant)
-    df['relevance'] = df['Category'].apply(lambda x: 1 if x == 'INFORMATION-TECHNOLOGY' else 0)
-
-    # for the column "Resume_str", we will preprocess the text by removing special characters and converting to lowercase
-    df['Resume_str'] = df['Resume_str'].str.replace('[^a-zA-Z0-9 ]', '', regex=True).str.lower()
-
-    # now lets remove stop words
-    df['Resume_str'] = df['Resume_str'].apply(lambda x: ' '.join([lemmatizer.lemmatize(word) for word in x.split() if word not in stop_words]))
-
-    # drop category column
-    df.drop(columns=['Category'], inplace=True)
-
-    # drop id column
-    df.drop(columns=['ID'], inplace=True)
-
-    return df
+    # Select only 'Resume_str' and 'relevance' columns for balancing
+    return df[['Resume_str', 'relevance']]
 
 def save_data(df, output_path):
     """Save the processed data to a CSV file."""
     df.to_csv(output_path, index=False)
 
-if __name__ == "__main__":
-    # Example usage
-    file_path = 'Dataset/Resume/Resume.csv'
+def main():
+    # File paths
+    primary_data_path = 'Dataset/Resume/Resume.csv'
+    additional_data_path = 'Dataset/Resume/resumes2.xlsx'
     output_path = 'processed_data.csv'
 
-    data = load_data(file_path)
-    processed_data_1 = preprocess_data(data)
+    # Load and preprocess the primary data
+    primary_data = load_data(primary_data_path)
+    processed_primary_data = preprocess_data(primary_data)
 
-    # print the no of relevant and non-relevant resumes
-    print("No of relevant resumes:", len(processed_data_1[processed_data_1['relevance'] == 1]))
-    print("No of non-relevant resumes:", len(processed_data_1[processed_data_1['relevance'] == 0]))
+    # Load and preprocess the additional data
+    additional_data = load_data(additional_data_path)
+    additional_data['relevance'] = 1  # Mark all as relevant
+    processed_additional_data = preprocess_data(additional_data)
 
-    # lets add more data to the dataset
-    # get the data from another file (resumes2.xlsx) and mark them as relevant
-    # after which we will randomly drop non-relevant resumes to balance the dataset
+    # Combine datasets and balance them by relevance
+    combined_data = pd.concat([processed_primary_data, processed_additional_data], ignore_index=True)
+    min_count = combined_data['relevance'].value_counts().min()
+    balanced_data = combined_data.groupby('relevance', group_keys=False).apply(
+        lambda x: x.sample(min_count, random_state=42)
+    ).reset_index(drop=True)
 
-    # load the new data
-    new_data = pd.read_excel('Dataset/Resume/resumes2.xlsx')
-    new_data['relevance'] = 1
-    # drop all columns except 'resume_text' and 'relevance'
-    new_data = new_data[['resume_text', 'relevance']]
-    new_data.columns = ['Resume_str', 'relevance']
+    # Apply the clean_resume_text function to each resume with tqdm progress bar after balancing
+    tqdm.pandas(desc="Cleaning resumes")
+    balanced_data['Resume_str'] = balanced_data['Resume_str'].astype(str).progress_apply(clean_resume_text)
 
-    # merge the new data with the old data
-    processed_data_2 = pd.concat([processed_data_1, new_data], ignore_index=True)
+    # Ensure only the required columns are saved
+    balanced_data = balanced_data[['Resume_str', 'relevance']]
+    save_data(balanced_data, output_path)
 
-    # print the no of relevant and non-relevant resumes
-    print("No of relevant resumes:", len(processed_data_2[processed_data_2['relevance'] == 1]))
-    print("No of non-relevant resumes:", len(processed_data_2[processed_data_2['relevance'] == 0]))
-
-    # randomly drop non-relevant resumes to balance the dataset
-    processed_data_2 = processed_data_2.groupby('relevance').apply(lambda x: x.sample(n=len(processed_data_2[processed_data_2['relevance'] == 1]))).reset_index(drop=True)
-
-    # print the no of relevant and non-relevant resumes
-    print("No of relevant resumes:", len(processed_data_2[processed_data_2['relevance'] == 1]))
-    print("No of non-relevant resumes:", len(processed_data_2[processed_data_2['relevance'] == 0]))
-
-    save_data(processed_data_2, output_path)
-
+if __name__ == "__main__":
+    main()
