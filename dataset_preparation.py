@@ -3,6 +3,7 @@ import os
 import nltk
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
+import openpyxl
 
 nltk.download('wordnet')
 nltk.download('stopwords')
@@ -48,6 +49,9 @@ def preprocess_data(df):
     # drop category column
     df.drop(columns=['Category'], inplace=True)
 
+    # drop id column
+    df.drop(columns=['ID'], inplace=True)
+
     return df
 
 def save_data(df, output_path):
@@ -60,5 +64,36 @@ if __name__ == "__main__":
     output_path = 'processed_data.csv'
 
     data = load_data(file_path)
-    processed_data = preprocess_data(data)
-    save_data(processed_data, output_path)
+    processed_data_1 = preprocess_data(data)
+
+    # print the no of relevant and non-relevant resumes
+    print("No of relevant resumes:", len(processed_data_1[processed_data_1['relevance'] == 1]))
+    print("No of non-relevant resumes:", len(processed_data_1[processed_data_1['relevance'] == 0]))
+
+    # lets add more data to the dataset
+    # get the data from another file (resumes2.xlsx) and mark them as relevant
+    # after which we will randomly drop non-relevant resumes to balance the dataset
+
+    # load the new data
+    new_data = pd.read_excel('Dataset/Resume/resumes2.xlsx')
+    new_data['relevance'] = 1
+    # drop all columns except 'resume_text' and 'relevance'
+    new_data = new_data[['resume_text', 'relevance']]
+    new_data.columns = ['Resume_str', 'relevance']
+
+    # merge the new data with the old data
+    processed_data_2 = pd.concat([processed_data_1, new_data], ignore_index=True)
+
+    # print the no of relevant and non-relevant resumes
+    print("No of relevant resumes:", len(processed_data_2[processed_data_2['relevance'] == 1]))
+    print("No of non-relevant resumes:", len(processed_data_2[processed_data_2['relevance'] == 0]))
+
+    # randomly drop non-relevant resumes to balance the dataset
+    processed_data_2 = processed_data_2.groupby('relevance').apply(lambda x: x.sample(n=len(processed_data_2[processed_data_2['relevance'] == 1]))).reset_index(drop=True)
+
+    # print the no of relevant and non-relevant resumes
+    print("No of relevant resumes:", len(processed_data_2[processed_data_2['relevance'] == 1]))
+    print("No of non-relevant resumes:", len(processed_data_2[processed_data_2['relevance'] == 0]))
+
+    save_data(processed_data_2, output_path)
+
