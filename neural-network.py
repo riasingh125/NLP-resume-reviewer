@@ -85,3 +85,12 @@ history = model.fit(X_train, y_train, epochs=5, batch_size=32, validation_data=(
 
 # Display model summary
 model.summary()
+
+test_loss, test_accuracy = model.evaluate(X_test, y_test)
+print(f"Test Loss: {test_loss}")
+print(f"Test Accuracy: {test_accuracy}")
+
+# Predict relevance for the first 10 samples in the test set
+predictions = (model.predict(X_test[:10]) > 0.5).astype("int32")
+print("Predictions:", predictions.flatten())
+print("Actual:", y_test[:10])
