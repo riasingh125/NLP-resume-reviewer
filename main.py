@@ -17,8 +17,48 @@ max_words = 60000  # Vocabulary size for tokenizer
 max_len = 4000  # Maximum length for padding sequences
 
 # Load job description and resumes
-job_description = """Gen ai, rag, llm"""
-file_path = 'new_resumes.csv'  # Path to the resumes CSV file
+job_description = """Job Title: Software Developer (Entry to Mid-Level)
+
+Location: Remote/Hybrid
+
+Company: InnovateTech Solutions
+
+About Us:
+At InnovateTech Solutions, we strive to revolutionize industries with cutting-edge technology. Our diverse team is dedicated to designing, developing, and deploying high-impact software solutions that drive measurable results. If you’re passionate about innovation, teamwork, and creating meaningful change, we’d love to have you join us.
+
+Job Responsibilities:
+
+Collaborate with cross-functional teams, including product managers and designers, to develop and deliver scalable software applications.
+Design, build, and maintain efficient, reusable, and reliable code using programming languages like Python, JavaScript, or C++.
+Participate in code reviews, debugging, and optimization to ensure software quality and performance.
+Contribute to the development of cloud-based solutions, leveraging platforms such as AWS, Azure, or Google Cloud.
+Integrate and optimize front-end interfaces with back-end services using frameworks like React or Node.js.
+Support the deployment and maintenance of applications using CI/CD pipelines and containerization tools such as Docker and Kubernetes.
+Engage in Agile practices, including daily stand-ups, sprint planning, and retrospectives.
+Qualifications:
+
+Required:
+
+Bachelor’s degree in Computer Science, Software Engineering, or a related field.
+1+ years of professional or internship experience in software development.
+Proficiency in one or more programming languages (e.g., Python, JavaScript, Java, C++).
+Experience with front-end frameworks (e.g., React, Angular) or back-end frameworks (e.g., Node.js, Django).
+Familiarity with version control systems (e.g., Git) and Agile methodologies.
+Strong analytical and problem-solving skills with attention to detail.
+Preferred:
+
+Knowledge of cloud services (AWS, Azure, Google Cloud) and containerization tools (Docker, Kubernetes).
+Experience with database systems (e.g., MySQL, MongoDB).
+Strong communication skills and a team-oriented mindset.
+What We Offer:
+
+Competitive salary and benefits package.
+Flexible working hours with options for remote or hybrid setups.
+Opportunities for professional development, including training and certifications.
+A collaborative and innovative work environment.
+Team-building events and company-sponsored initiatives.
+"""
+file_path = 'test_data.csv'  # Path to the resumes CSV file
 resume_data = pd.read_csv(file_path)
 
 # Ensure all entries are strings and handle missing values
