@@ -1,64 +1,78 @@
-Resume_str,relevance_score,final_score
-"Senior Software Engineer Executive Profile: Senior Software Engineer with over 15 years of experience in system architecture, full-stack development, and cloud computing. Proven expertise in designing and implementing scalable software solutions for e-commerce, fintech, and health tech industries. Adept at managing cross-functional teams and ensuring project deliverables meet or exceed client expectations.
-Technical Expertise:
-Proficient in programming languages: Python, Java, C++
-Cloud platforms: AWS, Azure, Google Cloud
-Database systems: MySQL, PostgreSQL, MongoDB
-Frameworks and tools: Django, React, Kubernetes
-Professional Experience:
-Senior Software Engineer at TechCorp (2015-Present): Lead a team of 10 engineers to develop a microservices-based architecture for the company's flagship product, resulting in a 30% improvement in system performance.
-Software Developer at DataFlow Inc. (2010-2015): Designed and implemented a data analytics platform, increasing operational efficiency by 40%.
-Education:
-M.Sc. in Computer Science, Stanford University
-B.Sc. in Computer Engineering, University of Michigan
-",0.50055367,0.5293467555875364
-"Product Manager Executive Profile: Product Manager with 8 years of experience in agile product development, user research, and market analysis. Proven ability to deliver high-quality products that meet customer needs and drive revenue growth.
-Technical Expertise:
-Tools: Jira, Confluence, Trello
-User research: Usability testing, A/B testing
-Agile methodologies: Scrum, Kanban
-Professional Experience:
-Product Manager at InnovateTech (2017-Present): Led the development of a SaaS product that generated $2M in annual revenue.
-Associate Product Manager at MarketReach (2014-2017): Conducted market research to identify customer needs, driving the development of new features.
-Education:
-MBA in Product Management, Kellogg School of Management
-B.A. in Economics, University of Pennsylvania
-",0.51146674,0.5158398467043172
-"Civil Engineer Executive Profile: Civil Engineer with 15 years of experience in structural design, project management, and sustainable construction. Adept at delivering high-quality projects on time and within budget.
-Technical Expertise:
-Tools: AutoCAD, STAAD Pro, Revit
-Project management: Primavera, MS Project
-Sustainable construction: LEED certification, Green building materials
-Professional Experience:
-Senior Civil Engineer at BuildPro (2010-Present): Managed construction projects worth over $50M.
-Junior Civil Engineer at StructDesign (2005-2010): Designed structural elements for residential and commercial buildings.
-Education:
-M.Sc. in Civil Engineering, Stanford University
-B.Sc. in Civil Engineering, Purdue University
+Resume_str,relevance_score,keyword_score,similarity_score,final_score
+"John Doe
+Email: johndoe@example.com Phone: +1 234 567 8900 LinkedIn: linkedin.com/in/johndoe GitHub: github.com/johndoe Portfolio: johndoe-ai.com
 
+Executive Profile
+Generative AI Engineer with 5+ years of experience in developing, deploying, and optimizing cutting-edge AI solutions. Expertise in building generative models for text, images, and code using state-of-the-art frameworks such as GPT, Stable Diffusion, and DALL-E. Passionate about leveraging AI to solve real-world problems, drive innovation, and enhance user experiences.
 
-",0.54864913,0.5115995989156806
-"Marketing Specialist Executive Profile: Marketing Specialist with 10 years of experience in digital marketing, content strategy, and brand management. Expertise in SEO, PPC, and analytics tools. Recognized for driving brand growth and customer engagement through innovative strategies.
+Technical Expertise
+Programming Languages: Python, JavaScript, C++, Rust
+Frameworks & Libraries: PyTorch, TensorFlow, Hugging Face Transformers, LangChain, OpenCV
+Generative Models: GPT, BERT, Stable Diffusion, StyleGAN, T5
+Machine Learning: Supervised/Unsupervised Learning, Reinforcement Learning, Transfer Learning
+Cloud Platforms: AWS, GCP, Azure
+DevOps Tools: Docker, Kubernetes, Git, Jenkins
+Data Engineering: SQL, Spark, Airflow
+Other Tools: Jupyter Notebook, Streamlit, FastAPI, Tableau
+
+Professional Experience
+Senior Generative AI Engineer
+AI Innovators Inc. | Remote | May 2020 – Present
+Designed and deployed a generative AI-based customer support chatbot using OpenAI’s GPT-4, reducing query resolution time by 45%.
+Developed an automated video generation pipeline using Stable Diffusion, cutting production costs by 30%.
+Fine-tuned BERT models for contextual text summarization, increasing accuracy by 15% on internal datasets.
+Implemented a Retrieval-Augmented Generation (RAG) pipeline for document querying with vector databases like Pinecone and Weaviate.
+Partnered with product teams to build AI-powered tools, achieving a 25% increase in customer satisfaction scores.
+Machine Learning Engineer
+DataVision AI | Boston, MA | July 2017 – April 2020
+Created an NLP-based sentiment analysis tool that processed over 1M tweets daily with 92% accuracy.
+Designed and deployed an image-to-text generative model for document digitization, reducing manual effort by 60%.
+Conducted extensive hyperparameter tuning on GANs, improving model convergence speed by 20%.
+Built a recommendation system for e-commerce platforms using collaborative filtering and neural networks.
+
+Education
+Master of Science in Artificial Intelligence Massachusetts Institute of Technology (MIT) | Cambridge, MA | 2017 Thesis: ""Advancements in Generative Adversarial Networks for Artistic Image Synthesis""
+Bachelor of Science in Computer Science University of California, Berkeley | Berkeley, CA | 2015
+
+Notable Projects
+AI-Powered Portfolio Generator
+Built a Streamlit-based generative portfolio tool that uses LLMs to create professional profiles dynamically.
+Neural Style Transfer for Art Creation
+Designed an app that lets users create artwork by applying neural style transfer using pre-trained GANs.
+Code Autocompletion Tool
+Developed a GPT-based autocompletion feature for IDEs, enhancing developer productivity by 35%.
+
+Certifications
+AWS Certified Machine Learning – Specialty
+TensorFlow Developer Certificate
+Certified Kubernetes Administrator (CKA)
+
+Publications
+""Scaling Generative AI for Enterprise Applications"" - AI Journal, 2022
+""Transforming E-commerce with Generative Models"" - TechCrunch AI, 2021
+
+Interests
+AI Ethics and Fairness
+Open-Source Contributions
+Creative Applications of AI in Music and Art
+",1.0,0.9999999999999998,1.0,1.0000000000000002
+"Data Scientist Executive Profile: Data Scientist with over 7 years of experience in predictive modeling, machine learning, and statistical analysis. Skilled in transforming complex datasets into actionable insights to drive business growth.
 Technical Expertise:
-SEO tools: Ahrefs, SEMrush, Moz
-Analytics platforms: Google Analytics, Tableau
-Content management systems: WordPress, HubSpot
+Programming languages: Python, R, SQL
+Machine learning frameworks: TensorFlow, PyTorch
+Data visualization: Tableau, Power BI
 Professional Experience:
-Marketing Manager at AdWorld (2017-Present): Increased online traffic by 50% through targeted marketing campaigns and SEO strategies.
-Digital Marketing Specialist at BrandBoost (2013-2017): Developed and executed PPC campaigns, resulting in a 25% increase in ROI.
+Data Scientist at Insight Analytics (2018-Present): Built predictive models that increased customer retention by 15%.
+Junior Data Analyst at PredictPro (2015-2018): Cleaned and analyzed large datasets to provide actionable insights, improving operational efficiency by 20%.
 Education:
-MBA in Marketing, Harvard Business School
-B.A. in Communications, NYU
-",0.54635787,0.5084128827634065
-"HR Specialist Executive Profile: HR Specialist with 8 years of experience in talent acquisition, employee relations, and training development. Skilled at building effective HR strategies to enhance organizational culture.
+M.Sc. in Data Science, Carnegie Mellon University
+B.Sc. in Mathematics, University of Chicago",0.0,0.2195121951219512,0.0797359994046436,0.0800378437971927
+"Junior Software Developer (New to Industry) Executive Profile: Junior Software Developer passionate about building innovative and user-friendly software solutions. Recently graduated and eager to apply technical skills in a dynamic work environment.
 Technical Expertise:
-Tools: Workday, SAP SuccessFactors, BambooHR
-Training: Leadership development, Conflict resolution
-Recruitment: Full-cycle recruitment, Employer branding
+Programming languages: Python, JavaScript, HTML, CSS
+Frameworks: React, Node.js
+Tools: Git, Visual Studio Code
 Professional Experience:
-HR Manager at TalentHub (2018-Present): Increased employee retention by 15% through innovative engagement programs.
-HR Specialist at PeopleFirst (2014-2018): Recruited 50+ employees across various departments.
+Software Developer Intern at CodeNext (2024): Contributed to the development of a web application, implementing front-end features that improved user engagement by 15%.
 Education:
-MBA in Human Resources, Columbia Business School
-B.A. in Psychology, University of California, Los Angeles
-",0.5210139,0.49744220386380733
+B.Sc. in Computer Science, University of Texas at Austin",0.03901687783474195,0.0,0.0,0.0

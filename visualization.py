@@ -2,82 +2,113 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from wordcloud import WordCloud
-from tqdm import tqdm
+import streamlit as st
 
 # Load ranked resumes
 ranked_resumes_file = 'ranked_resumes.csv'  # Replace with your file path
 ranked_resumes = pd.read_csv(ranked_resumes_file)
 
+# Streamlit Dashboard
+st.title("Interactive Resume Visualization Dashboard")
+st.sidebar.header("Dashboard Settings")
+
+# Determine the maximum value dynamically based on the number of resumes
+max_resumes = len(ranked_resumes)
+
+# Sidebar Configurations
+top_n = st.sidebar.slider(
+    "Select Number of Top Resumes to Visualize:",
+    min_value=1,
+    max_value=max_resumes,
+    value=min(10, max_resumes)  # Default to 10 or total resumes if less than 10
+)
+score_threshold = st.sidebar.slider("Relevance Score Threshold:", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
+visualization_type = st.sidebar.selectbox(
+    "Choose Visualization:",
+    ["Bar Chart", "Heatmap", "Word Cloud", "Score Distribution", "Detailed Resume Comparison"]
+)
 
 # Visualization 1: Bar Chart for Top Ranked Resumes
-def bar_chart_top_resumes(ranked_resumes, top_n=10):
-    """Visualize the top N resumes and their final scores."""
+if visualization_type == "Bar Chart":
+    st.header(f"Top {top_n} Ranked Resumes")
     top_resumes = ranked_resumes.head(top_n).copy()
     top_resumes['Resume'] = top_resumes['Resume_str'].apply(lambda x: x[:50] + '...' if len(x) > 50 else x)
 
-    plt.figure(figsize=(12, 6))
-    plt.barh(top_resumes['Resume'], top_resumes['final_score'], color='skyblue')
-    plt.xlabel('Final Score', fontsize=14)
-    plt.ylabel('Resume (truncated)', fontsize=14)
-    plt.title(f'Top {top_n} Ranked Resumes', fontsize=16)
-    plt.gca().invert_yaxis()  # Invert y-axis to have the highest score at the top
-    plt.tight_layout()
-    plt.show()
-
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.barh(top_resumes['Resume'], top_resumes['final_score'], color='skyblue')
+    ax.set_xlabel('Final Score', fontsize=14)
+    ax.set_ylabel('Resume (truncated)', fontsize=14)
+    ax.set_title(f'Top {top_n} Ranked Resumes', fontsize=16)
+    ax.invert_yaxis()  # Invert y-axis to have the highest score at the top
+    st.pyplot(fig)
 
 # Visualization 2: Heatmap of Score Components
-def heatmap_score_components(ranked_resumes, top_n=10):
-    """Visualize the components contributing to the final score for top resumes."""
+elif visualization_type == "Heatmap":
+    st.header(f"Heatmap of Score Components for Top {top_n} Resumes")
     top_resumes = ranked_resumes.head(top_n).copy()
     top_resumes['Resume'] = top_resumes['Resume_str'].apply(lambda x: x[:30] + '...' if len(x) > 30 else x)
+    top_resumes = top_resumes[['Resume', 'relevance_score', 'keyword_score', 'similarity_score', 'final_score']].set_index('Resume')
 
-    # Simulating Keyword Score and Similarity Score (if not already in the file)
-    keywords = ['Python', 'Machine Learning', 'TensorFlow', 'PyTorch', 'Data Analysis']  # Example keywords
-
-    def keyword_match_score(resume, keywords):
-        resume_words = resume.lower().split()
-        return sum(1 for word in resume_words if word.lower() in keywords) / len(keywords)
-
-    def mock_similarity_score(resume):
-        # Placeholder for similarity scores, replace with your actual similarity computation
-        return len(resume) % 100 / 100.0
-
-    top_resumes['Keyword Score'] = top_resumes['Resume_str'].apply(lambda x: keyword_match_score(x, keywords))
-    top_resumes['Similarity Score'] = top_resumes['Resume_str'].apply(mock_similarity_score)
-    top_resumes = top_resumes[['Resume', 'relevance_score', 'Keyword Score', 'Similarity Score', 'final_score']]
-    top_resumes.set_index('Resume', inplace=True)
-
-    plt.figure(figsize=(12, 8))
+    fig, ax = plt.subplots(figsize=(10, 8))
     sns.heatmap(
-        top_resumes[['relevance_score', 'Keyword Score', 'Similarity Score', 'final_score']],
+        top_resumes,
         annot=True,
         cmap='coolwarm',
-        fmt='.2f'
+        fmt='.2f',
+        ax=ax
     )
-    plt.title('Score Components for Top Resumes', fontsize=16)
-    plt.show()
-
+    ax.set_title("Score Components Heatmap", fontsize=16)
+    st.pyplot(fig)
 
 # Visualization 3: Word Cloud for Relevant Resumes
-def word_cloud_relevant_resumes(ranked_resumes):
-    """Generate a word cloud from relevant resumes."""
-    relevant_resumes = ranked_resumes[ranked_resumes['final_score'] > 0.5]  # Threshold for relevance
+elif visualization_type == "Word Cloud":
+    st.header("Word Cloud of Relevant Resumes")
+    relevant_resumes = ranked_resumes[ranked_resumes['final_score'] >= score_threshold]
     text = ' '.join(relevant_resumes['Resume_str'])
     wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
 
-    plt.figure(figsize=(10, 6))
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis('off')
-    plt.title('Word Cloud of Relevant Resumes', fontsize=16)
-    plt.show()
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.imshow(wordcloud, interpolation='bilinear')
+    ax.axis('off')
+    ax.set_title("Word Cloud", fontsize=16)
+    st.pyplot(fig)
 
+# Visualization 4: Score Distribution
+elif visualization_type == "Score Distribution":
+    st.header("Score Distribution")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.histplot(ranked_resumes['final_score'], bins=20, kde=True, ax=ax, color='green')
+    ax.set_xlabel('Final Score', fontsize=14)
+    ax.set_ylabel('Frequency', fontsize=14)
+    ax.set_title('Distribution of Final Scores', fontsize=16)
+    st.pyplot(fig)
 
-# Execute visualizations
-print("Generating Bar Chart...")
-bar_chart_top_resumes(ranked_resumes)
+# Visualization 5: Detailed Resume Comparison
+elif visualization_type == "Detailed Resume Comparison":
+    st.header("Detailed Resume Comparison")
+    selected_resumes = st.multiselect(
+        "Select Resumes for Detailed Comparison:",
+        options=ranked_resumes['Resume_str'],
+        default=ranked_resumes['Resume_str'].iloc[:2]
+    )
+    if selected_resumes:
+        comparison_df = ranked_resumes[ranked_resumes['Resume_str'].isin(selected_resumes)][
+            ['Resume_str', 'relevance_score', 'keyword_score', 'similarity_score', 'final_score']
+        ]
+        st.table(comparison_df)
+    else:
+        st.write("Select at least one resume for comparison.")
 
-print("Generating Heatmap of Score Components...")
-heatmap_score_components(ranked_resumes)
+# Interactive Table
+st.header("Interactive Resume Table")
+filtered_resumes = ranked_resumes[ranked_resumes['final_score'] >= score_threshold]
+st.dataframe(filtered_resumes)
 
-print("Generating Word Cloud...")
-word_cloud_relevant_resumes(ranked_resumes)
+# Download Button for Filtered Resumes
+csv_download = filtered_resumes.to_csv(index=False).encode('utf-8')
+st.download_button(
+    label="Download Filtered Resumes as CSV",
+    data=csv_download,
+    file_name="filtered_resumes.csv",
+    mime="text/csv"
+)
