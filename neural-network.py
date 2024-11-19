@@ -110,3 +110,21 @@ print(f"Test Accuracy: {test_accuracy}")
 predictions = (model.predict(X_test[:10]) > 0.5).astype("int32")
 print("Predictions:", predictions.flatten())
 print("Actual:", y_test[:10])
+
+# ROC AUC score
+from sklearn.metrics import roc_auc_score
+
+y_pred = model.predict(X_test).flatten()
+roc_auc = roc_auc_score(y_test, y_pred)
+
+print(f"ROC AUC Score: {roc_auc}")
+
+# Precision, Recall, and F1 Score
+from sklearn.metrics import precision_recall_fscore_support
+
+precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred.round(), average='binary')
+
+print(f"Precision: {precision}")
+print(f"Recall: {recall}")
+print(f"F1 Score: {f1}")
+
