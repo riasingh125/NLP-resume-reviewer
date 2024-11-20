@@ -8,70 +8,101 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from tqdm import tqdm
 from sklearn.feature_extraction.text import TfidfVectorizer
-from nltk.corpus import wordnet
+from nltk.corpus import wordnet, stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
 import matplotlib.pyplot as plt
 import seaborn as sns
+import logging
+import nltk
+
+# Download NLTK data
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load the trained neural network model
 nn_model_path = 'best_model.keras'
 nn_model = load_model(nn_model_path)
 
 # Define constants
-max_words = 60000
-max_len = 4000
+max_words = 20000  # Limit vocabulary size for tokenizer
+max_len = 4000  # Maximum sequence length for padding
+relevance_threshold = 0.5  # Threshold for filtering resumes
+weight_keywords = 0.6  # Redistributed weight
+weight_similarity = 0.4  # Redistributed weight
 
-# Load job description and resumes
-job_description = """Job Title: Generative AI Specialist / Engineer
+# Preprocessing: Remove stopwords and lemmatize text
+def preprocess_text(text):
+    stop_words = set(stopwords.words('english'))
+    lemmatizer = WordNetLemmatizer()
+    tokens = word_tokenize(text.lower())
+    tokens = [lemmatizer.lemmatize(word) for word in tokens if word.isalnum() and word not in stop_words]
+    return ' '.join(tokens)
+
+# Job Description
+job_description = """
+Job Title: Generative AI Specialist / Engineer
 Location: Remote / Hybrid / Onsite (Specify Location)
+
 About Us:
-At [Your Company Name], we are at the forefront of artificial intelligence innovation, creating solutions that leverage generative AI to revolutionize industries. Our mission is to harness the power of cutting-edge AI models to solve complex challenges, drive innovation, and create value for our customers. Join a team of AI enthusiasts, researchers, and engineers who are passionate about building the future.
+At [Your Company Name], we are pioneers in artificial intelligence innovation, delivering cutting-edge generative AI solutions to transform industries. Our mission is to leverage state-of-the-art AI models to tackle complex challenges, drive innovation, and create meaningful value for our clients. Join a passionate team of AI enthusiasts, researchers, and engineers shaping the future of technology.
 
 Role Overview:
-We are seeking a talented and motivated Generative AI Specialist to join our team. In this role, you will work on designing, developing, and deploying generative AI solutions across diverse applications such as natural language understanding, text generation, image synthesis, and more. You will collaborate with cross-functional teams to implement state-of-the-art AI techniques that push the boundaries of what’s possible.
+We are seeking a talented and motivated Generative AI Specialist to join our team. In this role, you will design, develop, and deploy generative AI solutions across diverse applications such as natural language processing, text generation, image synthesis, and more. You will collaborate with cross-functional teams to implement advanced AI techniques and deliver innovative solutions.
 
 Key Responsibilities:
-Model Development and Optimization:
+- **Model Development**:  
+  - Design, fine-tune, and deploy generative AI models (e.g., GPT, Stable Diffusion, DALL-E) tailored to specific use cases.  
+  - Optimize models for accuracy, efficiency, and scalability.  
 
-Design, fine-tune, and deploy generative models (e.g., GPT, Stable Diffusion, DALL-E, or similar) for specific use cases.
-Evaluate and optimize model performance for accuracy, efficiency, and scalability.
-Application Development:
+- **Application Integration**:  
+  - Integrate generative AI capabilities into existing systems and develop new AI-powered products, such as chatbots, content generation tools, and recommendation systems.  
+  - Collaborate with product and engineering teams to deliver seamless AI solutions.  
 
-Integrate generative AI capabilities into existing systems or develop new products, such as chatbots, content generation tools, recommendation engines, or creative applications.
-Collaborate with product and engineering teams to deliver AI-powered features.
-Data Engineering and Preprocessing:
+- **Data Engineering**:  
+  - Collect, preprocess, and curate large datasets for training and fine-tuning generative AI models.  
+  - Implement robust data pipelines to streamline AI workflows.  
 
-Collect, preprocess, and curate large datasets to train and fine-tune generative models.
-Implement robust data pipelines to ensure seamless integration of models with applications.
-Research and Innovation:
+- **Research and Innovation**:  
+  - Stay updated with the latest advancements in generative AI, machine learning, and deep learning.  
+  - Propose and implement innovative solutions using state-of-the-art techniques.  
 
-Stay updated with the latest advancements in generative AI, machine learning, and deep learning.
-Propose and implement innovative solutions leveraging state-of-the-art generative AI techniques.
-Evaluation and Testing:
+- **Evaluation and Testing**:  
+  - Develop metrics to evaluate model outputs and ensure alignment with business goals and ethical standards.  
+  - Conduct thorough testing to identify and mitigate biases or limitations.  
 
-Develop metrics and frameworks for evaluating model outputs, ensuring alignment with business goals and ethical standards.
-Conduct rigorous testing to identify and mitigate potential biases or failure modes.
-Documentation and Collaboration:
+- **Documentation and Collaboration**:  
+  - Document model architectures, system designs, and research findings.  
+  - Work closely with product managers, data scientists, and software engineers to align AI solutions with organizational goals.  
 
-Document research findings, model architectures, and system designs.
-Collaborate with cross-functional teams, including product managers, data scientists, and software engineers, to align generative AI solutions with organizational goals.
 Required Qualifications:
-Bachelor's or Master's degree in Computer Science, Artificial Intelligence, Machine Learning, or related field.
-2+ years of experience working with generative AI models (e.g., GPT, Transformer-based architectures, GANs, VAEs).
-Proficiency in Python and libraries such as PyTorch, TensorFlow, or Hugging Face Transformers.
-Experience with fine-tuning pre-trained models on custom datasets.
-Strong understanding of machine learning concepts, natural language processing (NLP), or computer vision.
-Familiarity with cloud platforms (e.g., AWS, GCP, Azure) for AI model deployment.
+- Bachelor’s or Master’s degree in Computer Science, Artificial Intelligence, Machine Learning, or a related field.  
+- 2+ years of experience working with generative AI models (e.g., GPT, GANs, VAEs).  
+- Proficiency in Python and frameworks such as PyTorch, TensorFlow, or Hugging Face Transformers.  
+- Experience in fine-tuning pre-trained models for custom datasets.  
+- Strong understanding of machine learning concepts, natural language processing (NLP), or computer vision.  
+
 Preferred Qualifications:
-Experience with Reinforcement Learning from Human Feedback (RLHF).
-Familiarity with vector databases and Retrieval-Augmented Generation (RAG) systems.
-Knowledge of large-scale distributed training and deployment techniques.
-Background in developing ethical AI systems with a focus on fairness, transparency, and privacy.
+- Experience with Reinforcement Learning from Human Feedback (RLHF).  
+- Familiarity with vector databases and Retrieval-Augmented Generation (RAG) systems.  
+- Knowledge of distributed training and deployment techniques.  
+- Background in ethical AI practices, including fairness, transparency, and privacy.  
+
 Soft Skills:
-Excellent problem-solving skills and the ability to think creatively about AI applications.
-Strong communication skills to articulate complex AI concepts to non-technical stakeholders.
-A collaborative mindset and willingness to work in a dynamic, fast-paced environment.
+- Strong problem-solving skills and creativity in developing AI applications.  
+- Effective communication skills to convey technical concepts to non-technical stakeholders.  
+- A collaborative mindset with the ability to work in dynamic, fast-paced environments.  
 """
 
+# Preprocess the job description
+logging.info("Preprocessing job description...")
+job_description = preprocess_text(job_description)
+
+# Load resumes
 file_path = 'test_data.csv'
 resume_data = pd.read_csv(file_path)
 
@@ -79,27 +110,28 @@ resume_data = pd.read_csv(file_path)
 resume_data['Resume_str'] = resume_data['Resume_str'].fillna('').astype(str)
 
 # Tokenize and pad the resume strings
-print("Tokenizing resumes...")
+logging.info("Tokenizing and padding resumes...")
 tokenizer = Tokenizer(num_words=max_words)
 tokenizer.fit_on_texts(resume_data['Resume_str'])
 sequences = tokenizer.texts_to_sequences(resume_data['Resume_str'])
 X = pad_sequences(sequences, maxlen=max_len)
 
 # Predict relevance using the neural network
-print("Filtering relevant resumes...")
+logging.info("Filtering relevant resumes using neural network...")
 predictions = nn_model.predict(X)
 resume_data['relevance_score'] = predictions.flatten()
 
 # Filter relevant resumes (threshold = 0.5)
-relevant_resumes = resume_data[resume_data['relevance_score'] >= 0.5].copy()
+relevant_resumes = resume_data[resume_data['relevance_score'] >= relevance_threshold].copy()
+logging.info(f"Number of relevant resumes: {len(relevant_resumes)}")
 
 # Extract keywords from job description using TF-IDF
-print("Extracting keywords from job description...")
 def extract_keywords(text, top_n=20):
     vectorizer = TfidfVectorizer(stop_words='english', max_features=top_n)
     tfidf_matrix = vectorizer.fit_transform([text])
     return vectorizer.get_feature_names_out()
 
+logging.info("Extracting keywords from job description...")
 keywords = extract_keywords(job_description, top_n=20)
 
 # Expand keywords using synonyms
@@ -114,12 +146,11 @@ def expand_keywords(keywords):
 expanded_keywords = expand_keywords(keywords)
 
 def keyword_match_score(resume, keywords):
-    resume_words = resume.lower().split()
-    keyword_count = sum(1 for word in resume_words if word in keywords)
-    return keyword_count / len(keywords)
+    resume_words = set(resume.lower().split())
+    return len(resume_words.intersection(keywords)) / len(keywords)
 
 # Semantic similarity score using Sentence Transformers
-print("Loading Sentence-BERT model for semantic similarity...")
+logging.info("Loading Sentence-BERT model for semantic similarity...")
 sbert_model = SentenceTransformer('all-MiniLM-L6-v2')
 jd_embedding = sbert_model.encode(job_description)
 
@@ -132,14 +163,14 @@ def semantic_similarity_score(resume, jd_embedding, model):
 scaler = MinMaxScaler()
 
 def normalize_scores(df, columns):
-    df[columns] = scaler.fit_transform(df[columns])
+    for col in columns:
+        df[col] = scaler.fit_transform(df[[col]])
     return df
 
-print("Scoring resumes...")
+logging.info("Scoring resumes...")
 scores = []
 for _, row in tqdm(relevant_resumes.iterrows(), total=len(relevant_resumes)):
     resume_text = row['Resume_str']
-    relevance_score = row['relevance_score']
 
     # Keyword match score
     keyword_score = keyword_match_score(resume_text, expanded_keywords)
@@ -147,11 +178,13 @@ for _, row in tqdm(relevant_resumes.iterrows(), total=len(relevant_resumes)):
     # Semantic similarity score
     similarity_score = semantic_similarity_score(resume_text, jd_embedding, sbert_model)
 
-    # Final weighted score
-    final_score = 0.4 * relevance_score + 0.3 * keyword_score + 0.3 * similarity_score
+    # Final weighted score (without relevance score)
+    final_score = (
+        weight_keywords * keyword_score
+        + weight_similarity * similarity_score
+    )
     scores.append({
         "Resume_str": resume_text,
-        "relevance_score": relevance_score,
         "keyword_score": keyword_score,
         "similarity_score": similarity_score,
         "final_score": final_score,
@@ -161,7 +194,7 @@ for _, row in tqdm(relevant_resumes.iterrows(), total=len(relevant_resumes)):
 scores_df = pd.DataFrame(scores)
 
 # Normalize scores
-scores_df = normalize_scores(scores_df, ['relevance_score', 'keyword_score', 'similarity_score', 'final_score'])
+scores_df = normalize_scores(scores_df, ['keyword_score', 'similarity_score', 'final_score'])
 
 # Sort by final score
 ranked_resumes = scores_df.sort_values(by='final_score', ascending=False)
@@ -169,4 +202,11 @@ ranked_resumes = scores_df.sort_values(by='final_score', ascending=False)
 # Save the ranked resumes
 output_file = 'ranked_resumes.csv'
 ranked_resumes.to_csv(output_file, index=False)
-print(f"Ranked resumes saved to {output_file}")
+logging.info(f"Ranked resumes saved to {output_file}")
+
+# Visualization
+sns.histplot(ranked_resumes['final_score'], kde=True)
+plt.title('Final Score Distribution')
+plt.xlabel('Final Score')
+plt.ylabel('Frequency')
+plt.show()

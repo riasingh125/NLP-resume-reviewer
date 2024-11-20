@@ -22,56 +22,68 @@ top_n = st.sidebar.slider(
     max_value=max_resumes,
     value=min(10, max_resumes)  # Default to 10 or total resumes if less than 10
 )
-score_threshold = st.sidebar.slider("Relevance Score Threshold:", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
+score_threshold = st.sidebar.slider("Final Score Threshold:", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
 visualization_type = st.sidebar.selectbox(
     "Choose Visualization:",
     ["Bar Chart", "Heatmap", "Word Cloud", "Score Distribution", "Detailed Resume Comparison"]
 )
 
+# Preprocessing Resumes for Display
+ranked_resumes['Truncated_Resume'] = ranked_resumes['Resume_str'].apply(
+    lambda x: x[:50] + '...' if len(x) > 50 else x
+)
+
 # Visualization 1: Bar Chart for Top Ranked Resumes
 if visualization_type == "Bar Chart":
     st.header(f"Top {top_n} Ranked Resumes")
-    top_resumes = ranked_resumes.head(top_n).copy()
-    top_resumes['Resume'] = top_resumes['Resume_str'].apply(lambda x: x[:50] + '...' if len(x) > 50 else x)
+    top_resumes = ranked_resumes.head(top_n)
 
     fig, ax = plt.subplots(figsize=(12, 6))
-    ax.barh(top_resumes['Resume'], top_resumes['final_score'], color='skyblue')
+    sns.barplot(
+        x='final_score',
+        y='Truncated_Resume',
+        data=top_resumes,
+        palette='coolwarm',
+        ax=ax
+    )
     ax.set_xlabel('Final Score', fontsize=14)
-    ax.set_ylabel('Resume (truncated)', fontsize=14)
+    ax.set_ylabel('Resume (Truncated)', fontsize=14)
     ax.set_title(f'Top {top_n} Ranked Resumes', fontsize=16)
-    ax.invert_yaxis()  # Invert y-axis to have the highest score at the top
     st.pyplot(fig)
 
 # Visualization 2: Heatmap of Score Components
 elif visualization_type == "Heatmap":
     st.header(f"Heatmap of Score Components for Top {top_n} Resumes")
-    top_resumes = ranked_resumes.head(top_n).copy()
-    top_resumes['Resume'] = top_resumes['Resume_str'].apply(lambda x: x[:30] + '...' if len(x) > 30 else x)
-    top_resumes = top_resumes[['Resume', 'relevance_score', 'keyword_score', 'similarity_score', 'final_score']].set_index('Resume')
 
-    fig, ax = plt.subplots(figsize=(10, 8))
-    sns.heatmap(
-        top_resumes,
-        annot=True,
-        cmap='coolwarm',
-        fmt='.2f',
-        ax=ax
-    )
-    ax.set_title("Score Components Heatmap", fontsize=16)
-    st.pyplot(fig)
+    required_columns = ['Truncated_Resume', 'keyword_score', 'similarity_score', 'final_score']
+    missing_columns = [col for col in required_columns if col not in ranked_resumes.columns]
+
+    if missing_columns:
+        st.error(f"Missing columns for heatmap: {missing_columns}")
+    else:
+        top_resumes = ranked_resumes.head(top_n)
+        heatmap_data = top_resumes[required_columns].set_index('Truncated_Resume')
+
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.heatmap(heatmap_data, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
+        ax.set_title("Score Components Heatmap", fontsize=16)
+        st.pyplot(fig)
 
 # Visualization 3: Word Cloud for Relevant Resumes
 elif visualization_type == "Word Cloud":
     st.header("Word Cloud of Relevant Resumes")
     relevant_resumes = ranked_resumes[ranked_resumes['final_score'] >= score_threshold]
-    text = ' '.join(relevant_resumes['Resume_str'])
-    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+    if not relevant_resumes.empty:
+        text = ' '.join(relevant_resumes['Resume_str'])
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
 
-    fig, ax = plt.subplots(figsize=(12, 6))
-    ax.imshow(wordcloud, interpolation='bilinear')
-    ax.axis('off')
-    ax.set_title("Word Cloud", fontsize=16)
-    st.pyplot(fig)
+        fig, ax = plt.subplots(figsize=(12, 6))
+        ax.imshow(wordcloud, interpolation='bilinear')
+        ax.axis('off')
+        ax.set_title("Word Cloud", fontsize=16)
+        st.pyplot(fig)
+    else:
+        st.write("No resumes meet the score threshold for the Word Cloud.")
 
 # Visualization 4: Score Distribution
 elif visualization_type == "Score Distribution":
@@ -93,7 +105,7 @@ elif visualization_type == "Detailed Resume Comparison":
     )
     if selected_resumes:
         comparison_df = ranked_resumes[ranked_resumes['Resume_str'].isin(selected_resumes)][
-            ['Resume_str', 'relevance_score', 'keyword_score', 'similarity_score', 'final_score']
+            ['Resume_str', 'keyword_score', 'similarity_score', 'final_score']
         ]
         st.table(comparison_df)
     else:
