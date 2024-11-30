@@ -43,8 +43,5 @@ Week 2: Implement and train the traditional NLP-based ranking model, focusing on
 Week 3: Evaluate the approach, measure performance on defined metrics, and visualize results.
 Week 4: Tweak functionality, aiming to achieve the highest accuracy and robustness. 
 Final Week: Write the report, and conduct error analysis.
-Responsibilities
-Since this project is a collaborative effort, responsibilities are distributed as follows:
-Dhruv Kamalesh Kumar: Responsible for setting up and testing the neural network, and evaluations.
-Ria Singh: Focused on implementing the traditional NLP-based ranking model, including feature extraction and cosine similarity ranking with data preprocessing, and the evaluations for the ranking system. 
+
 

@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
+from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score, confusion_matrix
 from wordcloud import WordCloud
 import streamlit as st
 
@@ -124,3 +126,35 @@ st.download_button(
     file_name="filtered_resumes.csv",
     mime="text/csv"
 )
+
+
+#Other Visualizations: Evaluation Metrics
+
+#F1 score, Mean Reciprocol Rank, and Normlaized Discounted Cumulative Gain  
+def plot_evaluation_metrics(f1, mrr, ndcg):
+    """Plot F1, MRR, and nDCG as a bar chart."""
+    metrics = {'F1 Score': f1, 'MRR': mrr, 'nDCG': ndcg}
+    plt.figure(figsize=(8, 5))
+    bars = plt.bar(metrics.keys(), metrics.values(), color=['blue', 'green', 'orange'])
+    plt.title('Evaluation Metrics', fontsize=16)
+    plt.ylabel('Score', fontsize=14)
+    plt.xlabel('Metrics', fontsize=14)
+    plt.ylim(0, 1)  # Scores are typically between 0 and 1
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, height, f'{height:.2f}', ha='center', va='bottom')
+    plt.savefig('evaluation_metrics.png')
+    plt.show()
+    
+def plot_score_distribution(scores):
+    """Plot the distribution of final scores."""
+    plt.figure(figsize=(10, 6))
+    sns.histplot(scores, bins=20, kde=True, color='skyblue')
+    plt.title('Distribution of Scores', fontsize=16)
+    plt.xlabel('Score', fontsize=14)
+    plt.ylabel('Frequency', fontsize=14)
+    plt.savefig('score_distribution.png')
+    plt.show()
+
+
+

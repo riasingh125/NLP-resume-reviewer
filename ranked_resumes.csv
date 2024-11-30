@@ -1,4 +1,15 @@
-Resume_str,keyword_score,similarity_score,final_score
+Resume_str,relevance_score
+"Data Scientist Executive Profile: Data Scientist with over 7 years of experience in predictive modeling, machine learning, and statistical analysis. Skilled in transforming complex datasets into actionable insights to drive business growth.
+Technical Expertise:
+Programming languages: Python, R, SQL
+Machine learning frameworks: TensorFlow, PyTorch
+Data visualization: Tableau, Power BI
+Professional Experience:
+Data Scientist at Insight Analytics (2018-Present): Built predictive models that increased customer retention by 15%.
+Junior Data Analyst at PredictPro (2015-2018): Cleaned and analyzed large datasets to provide actionable insights, improving operational efficiency by 20%.
+Education:
+M.Sc. in Data Science, Carnegie Mellon University
+B.Sc. in Mathematics, University of Chicago",0.95256746
 "John Doe
 Email: johndoe@example.com Phone: +1 234 567 8900 LinkedIn: linkedin.com/in/johndoe GitHub: github.com/johndoe Portfolio: johndoe-ai.com
 
@@ -55,7 +66,26 @@ Interests
 AI Ethics and Fairness
 Open-Source Contributions
 Creative Applications of AI in Music and Art
-",0.9999999999999998,1.0,0.9999999999999998
+",0.92520165
+"Mobile App Developer Executive Profile: Mobile App Developer with 5 years of experience in designing and developing user-friendly mobile applications. Proficient in cross-platform app development.
+Technical Expertise:
+Mobile platforms: iOS, Android, Flutter
+Programming languages: Swift, Kotlin, Dart
+Tools: Firebase, REST APIs
+Professional Experience:
+Mobile Developer at Appify Inc. (2019-Present): Developed an app with 1M+ downloads and a 4.8-star rating.
+Junior Developer at CodeSprint (2017-2019): Contributed to the development of a payment gateway system.
+Education:
+B.Sc. in Computer Science, Northeastern University",0.6630875
+"Junior Software Developer (New to Industry) Executive Profile: Junior Software Developer passionate about building innovative and user-friendly software solutions. Recently graduated and eager to apply technical skills in a dynamic work environment.
+Technical Expertise:
+Programming languages: Python, JavaScript, HTML, CSS
+Frameworks: React, Node.js
+Tools: Git, Visual Studio Code
+Professional Experience:
+Software Developer Intern at CodeNext (2024): Contributed to the development of a web application, implementing front-end features that improved user engagement by 15%.
+Education:
+B.Sc. in Computer Science, University of Texas at Austin",0.6477858
 "Senior Software Engineer Executive Profile: Senior Software Engineer with over 15 years of experience in system architecture, full-stack development, and cloud computing. Proven expertise in designing and implementing scalable software solutions for e-commerce, fintech, and health tech industries. Adept at managing cross-functional teams and ensuring project deliverables meet or exceed client expectations.
 Technical Expertise:
 Proficient in programming languages: Python, Java, C++
@@ -67,29 +97,7 @@ Senior Software Engineer at TechCorp (2015-Present): Lead a team of 10 engineers
 Software Developer at DataFlow Inc. (2010-2015): Designed and implemented a data analytics platform, increasing operational efficiency by 40%.
 Education:
 M.Sc. in Computer Science, Stanford University
-B.Sc. in Computer Engineering, University of Michigan",0.4285714285714285,0.5922253,0.5509743305142025
-"Data Scientist Executive Profile: Data Scientist with over 7 years of experience in predictive modeling, machine learning, and statistical analysis. Skilled in transforming complex datasets into actionable insights to drive business growth.
-Technical Expertise:
-Programming languages: Python, R, SQL
-Machine learning frameworks: TensorFlow, PyTorch
-Data visualization: Tableau, Power BI
-Professional Experience:
-Data Scientist at Insight Analytics (2018-Present): Built predictive models that increased customer retention by 15%.
-Junior Data Analyst at PredictPro (2015-2018): Cleaned and analyzed large datasets to provide actionable insights, improving operational efficiency by 20%.
-Education:
-M.Sc. in Data Science, Carnegie Mellon University
-B.Sc. in Mathematics, University of Chicago",0.21428571428571425,0.392847,0.3453587678682966
-"Mechanical Engineer Executive Profile: Mechanical Engineer with 10 years of experience in CAD design, thermal analysis, and manufacturing processes. Expert in designing efficient and cost-effective mechanical systems.
-Technical Expertise:
-CAD tools: SolidWorks, AutoCAD, CATIA
-Thermal analysis: ANSYS, Fluent
-Manufacturing: CNC machining, Injection molding
-Professional Experience:
-Mechanical Engineer at PrecisionTech (2016-Present): Designed machinery that increased production efficiency by 20%.
-Junior Mechanical Engineer at MechPro (2012-2016): Conducted thermal analysis to improve product durability by 15%.
-Education:
-M.Sc. in Mechanical Engineering, University of California, Berkeley
-B.Sc. in Mechanical Engineering, Georgia Tech",0.2857142857142857,0.36270636,0.33649114974756217
+B.Sc. in Computer Engineering, University of Michigan",0.26350397
 "Electrical Engineer Executive Profile: Electrical Engineer with 12 years of experience in circuit design, embedded systems, and renewable energy solutions. Known for delivering innovative solutions to complex engineering challenges.
 Technical Expertise:
 Circuit design tools: LTSpice, OrCAD, Eagle
@@ -100,38 +108,7 @@ Senior Electrical Engineer at GreenEnergy Solutions (2015-Present): Designed sol
 Electrical Engineer at CircuitCore (2010-2015): Developed embedded systems for IoT devices.
 Education:
 M.Sc. in Electrical Engineering, MIT
-B.Sc. in Electrical Engineering, University of Illinois",0.14285714285714285,0.33923453,0.28711457503395127
-"HR Specialist Executive Profile: HR Specialist with 8 years of experience in talent acquisition, employee relations, and training development. Skilled at building effective HR strategies to enhance organizational culture.
-Technical Expertise:
-Tools: Workday, SAP SuccessFactors, BambooHR
-Training: Leadership development, Conflict resolution
-Recruitment: Full-cycle recruitment, Employer branding
-Professional Experience:
-HR Manager at TalentHub (2018-Present): Increased employee retention by 15% through innovative engagement programs.
-HR Specialist at PeopleFirst (2014-2018): Recruited 50+ employees across various departments.
-Education:
-MBA in Human Resources, Columbia Business School
-B.A. in Psychology, University of California, Los Angeles",0.07142857142857141,0.29787076,0.23868536291821357
-"Civil Engineer Executive Profile: Civil Engineer with 15 years of experience in structural design, project management, and sustainable construction. Adept at delivering high-quality projects on time and within budget.
-Technical Expertise:
-Tools: AutoCAD, STAAD Pro, Revit
-Project management: Primavera, MS Project
-Sustainable construction: LEED certification, Green building materials
-Professional Experience:
-Senior Civil Engineer at BuildPro (2010-Present): Managed construction projects worth over $50M.
-Junior Civil Engineer at StructDesign (2005-2010): Designed structural elements for residential and commercial buildings.
-Education:
-M.Sc. in Civil Engineering, Stanford University
-B.Sc. in Civil Engineering, Purdue University",0.14285714285714285,0.27375132,0.23464254318519756
-"Junior Software Developer (New to Industry) Executive Profile: Junior Software Developer passionate about building innovative and user-friendly software solutions. Recently graduated and eager to apply technical skills in a dynamic work environment.
-Technical Expertise:
-Programming languages: Python, JavaScript, HTML, CSS
-Frameworks: React, Node.js
-Tools: Git, Visual Studio Code
-Professional Experience:
-Software Developer Intern at CodeNext (2024): Contributed to the development of a web application, implementing front-end features that improved user engagement by 15%.
-Education:
-B.Sc. in Computer Science, University of Texas at Austin",0.0,0.2804894,0.20947337526863058
+B.Sc. in Electrical Engineering, University of Illinois",0.031644978
 "Product Manager Executive Profile: Product Manager with 8 years of experience in agile product development, user research, and market analysis. Proven ability to deliver high-quality products that meet customer needs and drive revenue growth.
 Technical Expertise:
 Tools: Jira, Confluence, Trello
@@ -142,7 +119,29 @@ Product Manager at InnovateTech (2017-Present): Led the development of a SaaS pr
 Associate Product Manager at MarketReach (2014-2017): Conducted market research to identify customer needs, driving the development of new features.
 Education:
 MBA in Product Management, Kellogg School of Management
-B.A. in Economics, University of Pennsylvania",0.14285714285714285,0.19773632,0.17373134147461428
+B.A. in Economics, University of Pennsylvania",0.02484012
+"Civil Engineer Executive Profile: Civil Engineer with 15 years of experience in structural design, project management, and sustainable construction. Adept at delivering high-quality projects on time and within budget.
+Technical Expertise:
+Tools: AutoCAD, STAAD Pro, Revit
+Project management: Primavera, MS Project
+Sustainable construction: LEED certification, Green building materials
+Professional Experience:
+Senior Civil Engineer at BuildPro (2010-Present): Managed construction projects worth over $50M.
+Junior Civil Engineer at StructDesign (2005-2010): Designed structural elements for residential and commercial buildings.
+Education:
+M.Sc. in Civil Engineering, Stanford University
+B.Sc. in Civil Engineering, Purdue University",0.02243975
+"Mechanical Engineer Executive Profile: Mechanical Engineer with 10 years of experience in CAD design, thermal analysis, and manufacturing processes. Expert in designing efficient and cost-effective mechanical systems.
+Technical Expertise:
+CAD tools: SolidWorks, AutoCAD, CATIA
+Thermal analysis: ANSYS, Fluent
+Manufacturing: CNC machining, Injection molding
+Professional Experience:
+Mechanical Engineer at PrecisionTech (2016-Present): Designed machinery that increased production efficiency by 20%.
+Junior Mechanical Engineer at MechPro (2012-2016): Conducted thermal analysis to improve product durability by 15%.
+Education:
+M.Sc. in Mechanical Engineering, University of California, Berkeley
+B.Sc. in Mechanical Engineering, Georgia Tech",0.017025985
 "Marketing Specialist Executive Profile: Marketing Specialist with 10 years of experience in digital marketing, content strategy, and brand management. Expertise in SEO, PPC, and analytics tools. Recognized for driving brand growth and customer engagement through innovative strategies.
 Technical Expertise:
 SEO tools: Ahrefs, SEMrush, Moz
@@ -153,14 +152,15 @@ Marketing Manager at AdWorld (2017-Present): Increased online traffic by 50% thr
 Digital Marketing Specialist at BrandBoost (2013-2017): Developed and executed PPC campaigns, resulting in a 25% increase in ROI.
 Education:
 MBA in Marketing, Harvard Business School
-B.A. in Communications, NYU",0.0,0.057806373,0.031036326804174175
-"Mobile App Developer Executive Profile: Mobile App Developer with 5 years of experience in designing and developing user-friendly mobile applications. Proficient in cross-platform app development.
+B.A. in Communications, NYU",0.012560978
+"HR Specialist Executive Profile: HR Specialist with 8 years of experience in talent acquisition, employee relations, and training development. Skilled at building effective HR strategies to enhance organizational culture.
 Technical Expertise:
-Mobile platforms: iOS, Android, Flutter
-Programming languages: Swift, Kotlin, Dart
-Tools: Firebase, REST APIs
+Tools: Workday, SAP SuccessFactors, BambooHR
+Training: Leadership development, Conflict resolution
+Recruitment: Full-cycle recruitment, Employer branding
 Professional Experience:
-Mobile Developer at Appify Inc. (2019-Present): Developed an app with 1M+ downloads and a 4.8-star rating.
-Junior Developer at CodeSprint (2017-2019): Contributed to the development of a payment gateway system.
+HR Manager at TalentHub (2018-Present): Increased employee retention by 15% through innovative engagement programs.
+HR Specialist at PeopleFirst (2014-2018): Recruited 50+ employees across various departments.
 Education:
-B.Sc. in Computer Science, Northeastern University",0.07142857142857141,0.0,0.0
+MBA in Human Resources, Columbia Business School
+B.A. in Psychology, University of California, Los Angeles",0.0099232085
